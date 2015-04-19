@@ -9,29 +9,36 @@ import signal
 def pullfiles():
    start = timeit.default_timer()
    filenames = []
-   savedir = "/Users/howard/Documents/Research/VLF_Hissler/Data/"
+   savedir = "/Volumes/JIMSDISK/Data/"
 
-#connect to a URL
-   website = urllib2.urlopen("http://vlf-alexandria.stanford.edu/public_web_junk/southpole/2014/")
-
-#read html code
-   html = website.read()
-
-#use re.findall to get all the links
-   filenames = re.findall('SP.*?\.mat', html)
-
+   total = 0
    count = 0
    countpass = 0
-   for files in os.listdir(savedir):
+   #connect to a URL
+   website = urllib2.urlopen("http://vlf-alexandria.stanford.edu/public_web_junk/southpole/2014/")
+
+   #read html code
+   html = website.read()
+
+   #use re.findall to get all the links end with .mat
+   filenames = re.findall('SP.*?\.mat', html)
+   total = len(filenames)
+   list_saved = os.listdir(savedir)
+   print list_saved[0], list_saved[1]
+
+   for files in list_saved:
       if files.endswith(".mat"):
+         #removing the files on the disk form the list of downloads
          try:
             filenames.remove(files)
             count += 1
          except ValueError:
             countpass += 1
+   if countpass != 0:
+      print "num errors:", countpass
+   print "Total number of files on website:", total
    print "counted number of removes", count
-   print "counted number of failed removes", countpass
-   print "number files less removed:", len(filenames)
+   print "number files not removed:", len(filenames)
 
 #saves the file names into an array of html link
    links=len(filenames)*[0]
@@ -43,7 +50,8 @@ def pullfiles():
    print stop - start
 
    for i in range(len(links)):
-      os.system("curl -o "+ filenames[i] + " " + str(links[i]))
+      print filenames[i]
+      #os.system("curl -o "+ filenames[i] + " " + str(links[i]))
 
    print "links downloaded:",len(links)
 
