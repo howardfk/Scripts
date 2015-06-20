@@ -8,7 +8,7 @@ import signal
 
 def pullfiles():
    filenames = []
-   savedir = "/Volumes/JIMSDISK/Data/"
+   savedir = "/Users/howard/Documents/Research/VLF_Hissler/Data/" #"/Volumes/JIMSDISK/Data/"
 
    total = 0
    count = 0
